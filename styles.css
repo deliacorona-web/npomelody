@@ -66,12 +66,13 @@
       inset: 0;
       z-index: -2;
       pointer-events: none;
-      background-image: url("none");
+      /* Фоновый контур как на референсе */
+      background-image: url("https://rvswpgsxutfcpgvmzonr.supabase.co/storage/v1/object/public/images/bg-contour.jpg");
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center center;
       filter: grayscale(1) contrast(2.2) brightness(1.15);
-      opacity: .14;
+      opacity: .16;
     }
 
     body::after {
@@ -703,6 +704,8 @@
       height: auto;
       display: block;
       background: transparent;
+      /* Делает арт нейтрально‑серым в обеих темах */
+      filter: grayscale(1) brightness(1.25) contrast(1.1);
     }
 
     .heroArt .cap {
@@ -1878,7 +1881,7 @@
 
       body::before {
         filter: grayscale(1) invert(1) contrast(3.4) brightness(1.5);
-        opacity: .2;
+        opacity: .22;
       }
 
       .intro-start {

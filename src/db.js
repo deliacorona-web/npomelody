@@ -87,8 +87,9 @@ const logout = async () => {
   return client.auth.signOut();
 };
 
+// Используем таблицу profiles как источник пользователей (email / name / role)
 const getUsers = async () => withClient(async (client) => {
-  const { data, error } = await client.from('users').select('*').order('created_at', { ascending: false });
+  const { data, error } = await client.from('profiles').select('*').order('created_at', { ascending: false });
   return safeArray(data, error);
 }, []);
 
@@ -101,7 +102,7 @@ const checkIsAdmin = async () => {
 };
 
 const updateUserRole = async (id, role) => withClient(async (client) => {
-  const { data, error } = await client.from('users').update({ role }).eq('id', id).select().single();
+  const { data, error } = await client.from('profiles').update({ role }).eq('id', id).select().single();
   if (error) throw error;
   return data;
 }, null);
