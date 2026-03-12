@@ -127,6 +127,9 @@ const createEvent = async (payload) => withClient(async (client) => {
   return data;
 }, null);
 
+// Совместимость с админкой, которая вызывает db.addEvent/db.addArtist
+const addEvent = createEvent;
+
 const updateEvent = async (id, payload) => withClient(async (client) => {
   const { data, error } = await client.from('events').update(payload).eq('id', id).select().single();
   if (error) throw error;
@@ -144,6 +147,8 @@ const createArtist = async (payload) => withClient(async (client) => {
   if (error) throw error;
   return data;
 }, null);
+
+const addArtist = createArtist;
 
 const updateArtist = async (id, payload) => withClient(async (client) => {
   const { data, error } = await client.from('artists').update(payload).eq('id', id).select().single();
@@ -164,8 +169,8 @@ const api = {
   getEvents, getArtists, getReleases, getPodcasts, getStreams, getMerch,
   getSession, login, register, logout, syncDefaultData,
   getUsers, checkIsAdmin, updateUserRole, uploadImage,
-  createEvent, updateEvent, deleteEvent,
-  createArtist, updateArtist, deleteArtist
+  createEvent, updateEvent, deleteEvent, addEvent,
+  createArtist, updateArtist, deleteArtist, addArtist
 };
 
 window.dbLayer = api;
@@ -175,7 +180,7 @@ export {
   getEvents, getArtists, getReleases, getPodcasts, getStreams, getMerch,
   getSession, login, register, logout, syncDefaultData,
   getUsers, checkIsAdmin, updateUserRole, uploadImage,
-  createEvent, updateEvent, deleteEvent,
-  createArtist, updateArtist, deleteArtist
+  createEvent, updateEvent, deleteEvent, addEvent,
+  createArtist, updateArtist, deleteArtist, addArtist
 };
 

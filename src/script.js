@@ -518,7 +518,16 @@ function buildEventModalBody(eventItem) {
     right.appendChild(addressEl);
   }
 
-  const ticketUrl = safeHttpUrl(eventItem.ticketUrl);
+  // Поддерживаем разные варианты имени поля с ссылкой на билеты,
+  // чтобы работать и с camelCase, и с snake_case колонками в Supabase.
+  const rawTicketUrl =
+    eventItem.ticketUrl ||
+    eventItem.ticket_url ||
+    eventItem.ticketsUrl ||
+    eventItem.tickets_url ||
+    eventItem.ticket ||
+    eventItem.tickets;
+  const ticketUrl = safeHttpUrl(rawTicketUrl);
   const actions = el("div", { className: "event-modal-actions" });
   if (ticketUrl) {
     const link = el("a", { className: "btn primary event-ticket-btn", text: "Билеты / регистрация" });

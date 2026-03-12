@@ -225,12 +225,34 @@ async function loadEventsView() {
 }
 
 async function openEventEditor(id = null) {
-  let event = { title: '', date: '', place: 'НПО Мелодия', status: 'tickets', about: '', lineup: [], tags: [] };
+  let event = {
+    title: '',
+    date: '',
+    place: 'НПО Мелодия',
+    status: 'tickets',
+    about: '',
+    lineup: [],
+    tags: [],
+    // Ссылка на билеты может храниться в разных колонках — нормализуем
+    ticketUrl: '',
+    ticket_url: ''
+  };
   let isEdit = false;
 
   if (id) {
     const events = await db.getEvents();
-    event = events.find((e) => e.id === id) || event;
+    const found = events.find((e) => e.id === id);
+    if (found) {
+      const ticket =
+        found.ticketUrl ||
+        found.ticket_url ||
+        found.ticketsUrl ||
+        found.tickets_url ||
+        found.ticket ||
+        found.tickets ||
+        '';
+      event = { ...event, ...found, ticketUrl: ticket };
+    }
     isEdit = true;
   }
 
@@ -253,6 +275,10 @@ async function openEventEditor(id = null) {
           <option value="archive" ${event.status === 'archive' ? 'selected' : ''}>Архив</option>
           <option value="announce' ${event.status === 'announce' ? 'selected' : ''}>Анонс (скоро)</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label>Ссылка на билеты (https://...)</label>
+        <input type="url" name="ticket_url" value="${event.ticketUrl || ''}" placeholder="https://...">
       </div>
       <div class="form-group">
         <label>Описание</label>
@@ -307,7 +333,9 @@ async function openEventEditor(id = null) {
       about: fd.get('about'),
       lineup: fd.get('lineup').split(',').map((s) => s.trim()).filter(Boolean),
       place: event.place,
-      poster: posterUrl
+      poster: posterUrl,
+      // Пишем в snake_case колонку Supabase
+      ticket_url: (fd.get('ticket_url') || '').trim()
     };
 
     if (isEdit) {
