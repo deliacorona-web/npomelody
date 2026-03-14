@@ -706,9 +706,18 @@ function buildMerchModalBody(item) {
   right.appendChild(desc);
 
   const actions = el("div", { className: "event-modal-actions" });
+  const preorderUrl = (item.preorder_url != null && String(item.preorder_url).trim() !== "")
+    ? String(item.preorder_url).trim()
+    : (item.preorderUrl != null && String(item.preorderUrl).trim() !== "")
+      ? String(item.preorderUrl).trim()
+      : "";
   const button = el("button", { className: "btn primary event-ticket-btn", text: "Предзаказ" });
   button.type = "button";
-  button.addEventListener("click", () => alert("Тут будет форма/бот"));
+  if (preorderUrl) {
+    button.addEventListener("click", () => window.open(preorderUrl, "_blank", "noopener"));
+  } else {
+    button.addEventListener("click", () => alert("Тут будет форма/бот"));
+  }
   actions.appendChild(button);
 
   wrapper.appendChild(left);

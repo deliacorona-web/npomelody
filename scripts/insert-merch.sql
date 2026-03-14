@@ -1,6 +1,8 @@
 -- Выполни в Supabase: SQL Editor → New query → вставь и Run.
--- Таблица merch: id, title, price, status, desc, poster, created_at [, images ]
+-- Таблица merch: id, title, price, status, desc, poster, created_at [, images [, preorder_url ]]
 -- Колонка называется "desc", не description. Для карусели — images (jsonb).
+-- Ссылка на предзаказ — preorder_url (text). Добавить колонку один раз:
+-- ALTER TABLE merch ADD COLUMN IF NOT EXISTS preorder_url text;
 
 INSERT INTO merch (title, "desc", poster, images)
 VALUES (
