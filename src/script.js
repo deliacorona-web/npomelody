@@ -393,28 +393,17 @@ function renderEvents() {
 }
 
 function renderArtists() {
-  const searchEl = $("#artistSearch");
-  const q = ((searchEl && searchEl.value) || "").trim().toLowerCase();
   const wrap = $("#artistsGrid");
   if (!wrap) return;
   wrap.replaceChildren();
 
-  let list = [...data.artists].sort((a, b) => {
+  const list = [...data.artists].sort((a, b) => {
     if (a.name === "WEI" && b.name !== "WEI") return -1;
     if (b.name === "WEI" && a.name !== "WEI") return 1;
     return a.name.localeCompare(b.name);
   });
 
-  if (q) {
-    list = list.filter((a) =>
-      a.name.toLowerCase().includes(q) ||
-      a.role.toLowerCase().includes(q) ||
-      (a.tags || []).join(" ").toLowerCase().includes(q)
-    );
-  }
-
-  const toShow = q ? list : list.slice(0, ARTISTS_VISIBLE);
-  toShow.forEach((artist) => {
+  list.forEach((artist) => {
     const card = el("div", { className: "card artist-card" });
     card.appendChild(createMedia(artist.poster || "logo.png", artist.name, "media square"));
 
@@ -1065,8 +1054,6 @@ document.addEventListener("click", (e) => {
     alert(link.dataset.placeholderLink || "Поставь ссылку");
   }
 });
-
-$("#artistSearch")?.addEventListener("input", () => renderArtists());
 
 function renderSkeletonGrid(selector, count = 4, variant = "default") {
   const wrap = $(selector);
