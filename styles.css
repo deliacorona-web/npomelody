@@ -1198,6 +1198,24 @@
       transform: translateY(-50%);
     }
 
+    .modal-close {
+      width: 40px;
+      min-width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
     .modal-header .btn.ghost:hover,
     .modal-header .btn.ghost:active {
       transform: translateY(-50%);

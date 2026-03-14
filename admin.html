@@ -75,7 +75,11 @@
         <div class="modal-header-text">
           <div id="editorTitle" class="modal-title">Редактирование</div>
         </div>
-        <button class="btn ghost" id="editorClose" type="button">Закрыть</button>
+        <button class="btn ghost modal-close" id="editorClose" type="button" aria-label="Закрыть">
+        <svg class="modal-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
       </div>
       <div class="modal-body pad" id="editorBody">
         <!-- Форма генерируется динамически в JS -->
