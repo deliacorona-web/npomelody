@@ -150,9 +150,10 @@ function renderClubAccess() {
   }
 
   // When authenticated: hide profile section from page (no scroll); content only in modal
+  // Секция авторизации/регистрации не в прокрутке — только модалка по кнопке «Вход»
   const profileSection = document.getElementById("profile");
   if (profileSection) {
-    profileSection.style.display = userIsAuthenticated ? "none" : "";
+    profileSection.style.display = "none";
   }
 
   // При отсутствии авторизации: только «Вход», кнопка с картинкой профиля скрыта. При авторизации — наоборот.
