@@ -306,6 +306,12 @@
       font-size: 14px;
     }
 
+    .right .btn.profile-button {
+      width: auto;
+      min-width: auto;
+      padding: 10px 14px;
+    }
+
     .right .btn .sc-icon,
     .right .btn .profile-button-icon {
       width: 24px;
@@ -1502,6 +1508,12 @@
         font-size: 9px;
       }
 
+      .right .btn.profile-button {
+        width: auto;
+        min-width: auto;
+        padding: 8px 12px;
+      }
+
       .right .btn .sc-icon,
       .right .btn .profile-button-icon {
         width: 14px;
@@ -1889,6 +1901,12 @@
         min-width: 36px;
         height: 36px;
         font-size: 8px;
+      }
+
+      .right .btn.profile-button {
+        width: auto;
+        min-width: auto;
+        padding: 6px 10px;
       }
 
       .right .btn .sc-icon,
