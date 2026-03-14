@@ -84,7 +84,17 @@ navItems.forEach((item) => {
     item.classList.add('active');
 
     const view = item.dataset.view;
-    pageTitle.textContent = item.textContent.replace(/[^\а-яА-Яa-zA-Z\s\(\)]/g, '').trim();
+    const titles = {
+      dashboard: 'Дашборд',
+      users: 'Пользователи',
+      events: 'Афиша (События)',
+      artists: 'Артисты',
+      releases: 'Релизы',
+      podcasts: 'Подкасты',
+      streams: 'Стримы',
+      merch: 'Мерч'
+    };
+    pageTitle.textContent = titles[view] || view;
 
     if (view === 'dashboard') loadDashboard();
     if (view === 'users') loadUsersView();
@@ -273,7 +283,7 @@ async function openEventEditor(id = null) {
         <select name="status">
           <option value="tickets" ${event.status === 'tickets' ? 'selected' : ''}>Билеты в продаже</option>
           <option value="archive" ${event.status === 'archive' ? 'selected' : ''}>Архив</option>
-          <option value="announce' ${event.status === 'announce' ? 'selected' : ''}>Анонс (скоро)</option>
+          <option value="announce" ${event.status === 'announce' ? 'selected' : ''}>Анонс (скоро)</option>
         </select>
       </div>
       <div class="form-group">
