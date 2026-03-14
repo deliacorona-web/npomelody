@@ -133,21 +133,47 @@ function renderClubAccess() {
   const exclusiveContent = $("#exclusiveContent");
   const exclusiveBadge = $("#exclusiveBadge");
 
-  const isAuthorized = Boolean(clubSession?.email);
+  const userIsAuthenticated = Boolean(clubSession?.email);
 
-  if (authGuest) authGuest.style.display = isAuthorized ? "none" : "grid";
-  if (authMember) authMember.style.display = isAuthorized ? "block" : "none";
+  if (authGuest) authGuest.style.display = userIsAuthenticated ? "none" : "grid";
+  if (authMember) authMember.style.display = userIsAuthenticated ? "block" : "none";
   if (memberName) memberName.textContent = clubSession?.name || clubSession?.email || "участник";
 
-  if (exclusiveLocked) exclusiveLocked.style.display = isAuthorized ? "none" : "block";
-  if (exclusiveContent) exclusiveContent.style.display = isAuthorized ? "block" : "none";
-  if (exclusiveBadge) exclusiveBadge.textContent = isAuthorized ? "открыт" : "закрыт";
+  if (exclusiveLocked) exclusiveLocked.style.display = userIsAuthenticated ? "none" : "block";
+  if (exclusiveContent) exclusiveContent.style.display = userIsAuthenticated ? "block" : "none";
+  if (exclusiveBadge) exclusiveBadge.textContent = userIsAuthenticated ? "открыт" : "закрыт";
 
   if (authStatus) {
-    authStatus.textContent = isAuthorized
+    authStatus.textContent = userIsAuthenticated
       ? "Доступ к эксклюзиву активен."
       : "Доступ к эксклюзиву закрыт.";
   }
+
+  // When authenticated: hide profile section from page (no scroll); content only in modal
+  const profileSection = document.getElementById("profile");
+  if (profileSection) {
+    profileSection.style.display = userIsAuthenticated ? "none" : "";
+  }
+
+  // UI updates by auth state: hide login/register when authenticated, show profile button
+  const loginForms = $$(".login-form, .register-form");
+  const loginRegisterButtons = $$(".login-register-buttons");
+  const profileButtons = $$(".profile-button");
+
+  loginForms.forEach((el) => { el.style.display = userIsAuthenticated ? "none" : ""; });
+  loginRegisterButtons.forEach((el) => { el.style.display = userIsAuthenticated ? "none" : "grid"; });
+  profileButtons.forEach((el) => {
+    if (userIsAuthenticated) {
+      el.removeAttribute("hidden");
+      const icon = el.querySelector(".profile-button-icon");
+      if (icon) {
+        icon.classList.add("user-avatar");
+        icon.setAttribute("aria-hidden", "true");
+      }
+    } else {
+      el.setAttribute("hidden", "");
+    }
+  });
 }
 
 function setClubStatus(message) {
@@ -657,6 +683,51 @@ function buildMerchModalBody(item) {
   return grid;
 }
 
+function buildProfileModalBody() {
+  const wrap = el("div", { className: "profile-modal-wrap" });
+
+  const exclusiveContent = $("#exclusiveContent");
+  if (exclusiveContent && exclusiveContent.children.length) {
+    const block = el("div", { className: "profile-modal-exclusive" });
+    const headingWrap = el("div");
+    headingWrap.style.textAlign = "center";
+    headingWrap.appendChild(el("b", { text: "Эксклюзив" }));
+    block.appendChild(headingWrap);
+    appendDivider(block);
+    block.appendChild(exclusiveContent.cloneNode(true));
+    wrap.appendChild(block);
+  }
+
+  const footer = el("div", { className: "profile-modal-footer" });
+  footer.style.marginTop = "24px";
+  footer.style.paddingTop = "16px";
+  footer.style.borderTop = "1px solid rgba(255,255,255,0.1)";
+  const logoutBtn = el("button", { className: "btn", text: "Выйти", type: "button" });
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      await window.dbLayer.logout();
+    } catch {}
+    clubSession = null;
+    renderClubAccess();
+    setClubStatus("Ты вышел из аккаунта.");
+    closeModal();
+  });
+  footer.appendChild(logoutBtn);
+  wrap.appendChild(footer);
+
+  return wrap;
+}
+
+function openProfileModal() {
+  if (!clubSession) return;
+  const userName = clubSession?.name || clubSession?.email || "Профиль";
+  openModal({
+    title: userName,
+    sub: "Доступ к эксклюзиву активен.",
+    body: buildProfileModalBody()
+  });
+}
+
 const openEventModal = (eventItem) => {
   if (!eventItem) return;
   openModal({
@@ -669,6 +740,16 @@ const openEventModal = (eventItem) => {
 $("#mClose")?.addEventListener("click", closeModal);
 modal?.addEventListener("click", (e) => {
   if (e.target === modal) closeModal();
+});
+
+// Профиль: при авторизации открывать модалку, а не секцию на странице
+document.addEventListener("click", (e) => {
+  const profileTrigger = e.target.closest(".profile-button, a[href='#profile']");
+  if (profileTrigger && clubSession) {
+    e.preventDefault();
+    openProfileModal();
+    return;
+  }
 });
 
 document.addEventListener("click", (e) => {

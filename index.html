@@ -45,6 +45,11 @@
             </svg>
           </a>
           <a class="btn" href="#streams">Live</a>
+          <a href="#profile" class="profile-button btn" aria-label="Профиль" hidden>
+            <svg class="profile-button-icon user-avatar" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
@@ -184,15 +189,15 @@
             <b>Аккаунт участника</b>
             <div class="divider"></div>
 
-            <div id="authGuest" class="grid auth-forms">
-              <form id="loginForm" class="auth-form">
+            <div id="authGuest" class="grid auth-forms login-register-buttons">
+              <form id="loginForm" class="auth-form login-form">
                 <b>Вход</b>
                 <input class="input" name="email" type="email" placeholder="Email" required>
                 <input class="input" name="password" type="password" placeholder="Пароль" required>
                 <button class="btn" type="submit">Войти</button>
               </form>
 
-              <form id="registerForm" class="auth-form">
+              <form id="registerForm" class="auth-form register-form">
                 <b>Регистрация</b>
                 <input class="input" name="name" placeholder="Имя" required>
                 <input class="input" name="email" type="email" placeholder="Email" required>
