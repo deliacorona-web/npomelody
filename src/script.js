@@ -147,7 +147,7 @@ function renderClubAccess() {
 
   if (authStatus) {
     authStatus.textContent = userIsAuthenticated
-      ? "Доступ к эксклюзиву активен."
+      ? ""
       : "Доступ к эксклюзиву закрыт.";
   }
 
@@ -261,6 +261,7 @@ function initClubAuth() {
       renderExclusiveItems(mockExclusive);
       renderClubAccess();
       setClubStatus("Регистрация успешна. Эксклюзив открыт.");
+      closeModal();
     } catch (err) {
       setClubStatus(err.message || "Ошибка регистрации.");
     }
@@ -290,7 +291,7 @@ function initClubAuth() {
       ];
       renderExclusiveItems(mockExclusive);
       renderClubAccess();
-      setClubStatus("Вход выполнен. Эксклюзив открыт.");
+      closeModal();
     } catch (err) {
       setClubStatus(err.message || "Неверный email или пароль.");
     }
@@ -779,7 +780,7 @@ function openProfileModal() {
   const userName = clubSession?.name || clubSession?.email || "Профиль";
   openModal({
     title: userName,
-    sub: "Доступ к эксклюзиву активен.",
+    sub: "",
     body: buildProfileModalBody()
   });
 }
