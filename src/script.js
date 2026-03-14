@@ -533,13 +533,11 @@ function buildEventModalBody(eventItem) {
   left.appendChild(createMedia(eventItem.poster || "logo.png", eventItem.title, "media"));
 
   const right = el("div", { className: "card pad event-modal-right" });
-  right.appendChild(el("b", { text: "Описание" }));
   const about = el("div", { className: "muted", text: eventItem.about || "—" });
   about.style.marginTop = "8px";
   right.appendChild(about);
 
   appendDivider(right);
-  right.appendChild(el("b", { text: "Лайнап" }));
   const lineup = el("div", { className: "muted" });
   lineup.style.marginTop = "8px";
   (eventItem.lineup || []).forEach((name, idx) => {
