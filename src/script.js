@@ -1,5 +1,7 @@
 // Copied from original script.js with no behavior changes.
 
+import { createCarousel } from "./carousel.js";
+
 // IMPORTANT:
 // 1) Сохрани твою картинку рядом с index.html
 // 2) Назови файл https://rvswpgsxutfcpgvmzonr.supabase.co/storage/v1/object/public/images/logo.png (или поменяй все src="https://rvswpgsxutfcpgvmzonr.supabase.co/storage/v1/object/public/images/logo.png" на свое имя)
@@ -360,6 +362,15 @@ function createMedia(imgSrc, imgAlt, className = "media") {
   return media;
 }
 
+function resolveImageSrc(imgSrc) {
+  const defaultLogo = "https://rvswpgsxutfcpgvmzonr.supabase.co/storage/v1/object/public/images/logo.png";
+  const raw = String(imgSrc || "").trim();
+  if (!raw || raw === "logo.png" || raw === "smile.png") return defaultLogo;
+  if (/^https?:\/\//i.test(raw)) return raw;
+  if (ASSET_PREFIX) return ASSET_PREFIX + raw.replace(/^\/+/, "");
+  return defaultLogo;
+}
+
 function renderEvents() {
   const wrap = $("#eventsGrid");
   if (!wrap) return;
@@ -485,10 +496,7 @@ function renderMerch() {
     card.appendChild(createMedia(item.image || item.poster || item.cover || "logo.png", item.title, "media square"));
 
     const pad = el("div", { className: "pad" });
-    const row = el("div", { className: "row sp" });
-    row.appendChild(el("b", { text: item.title }));
-    row.appendChild(createTag(item.status));
-    pad.appendChild(row);
+    pad.appendChild(el("b", { text: item.title }));
 
     const price = el("div", { className: "muted", text: item.price });
     price.style.marginTop = "6px";
@@ -657,34 +665,56 @@ function buildStreamModalBody(stream) {
   return card;
 }
 
+function getMerchImageUrls(item) {
+  let list = item.images;
+  if (typeof list === "string") {
+    try {
+      list = JSON.parse(list);
+    } catch {
+      list = null;
+    }
+  }
+  if (Array.isArray(list) && list.length > 0) return list;
+  const single = item.image || item.poster || item.cover || "logo.png";
+  return [single];
+}
+
 function buildMerchModalBody(item) {
-  const grid = el("div", { className: "grid g2" });
+  const wrapper = el("div", { className: "event-modal-wrap" });
 
-  const left = el("div", { className: "card" });
-  left.appendChild(createMedia(item.image || item.poster || item.cover || "logo.png", item.title, "media square"));
-  const leftPad = el("div", { className: "pad" });
-  leftPad.appendChild(el("b", { text: "Описание" }));
-  appendDivider(leftPad);
-  leftPad.appendChild(el("div", { className: "muted", text: item.desc || "—" }));
-  left.appendChild(leftPad);
+  const left = el("div", { className: "card event-modal-left" });
+  const imageSources = getMerchImageUrls(item);
+  const imageUrls = imageSources.map(resolveImageSrc);
+  const carouselContainer = el("div", { className: "merch-modal-carousel-wrap" });
+  left.appendChild(carouselContainer);
+  createCarousel(carouselContainer, {
+    urls: imageUrls,
+    intervalMs: 5000,
+    pauseOnHover: true,
+    carouselClass: "carousel merch-modal-carousel"
+  });
 
-  const right = el("div", { className: "card pad" });
-  right.appendChild(el("b", { text: "Оформление" }));
-  appendDivider(right);
-  right.appendChild(el("div", { className: "muted", text: "Пока предзаказ. Потом подключим оплату." }));
+  const right = el("div", { className: "card pad event-modal-right" });
+  // Описание из Supabase: колонка desc или description
+  const descText = (item.desc != null && String(item.desc).trim() !== "")
+    ? String(item.desc)
+    : (item.description != null && String(item.description).trim() !== "")
+      ? String(item.description)
+      : "Футболки — Марина Бибик, принты — Лофер";
+  const desc = el("div", { className: "muted", text: descText });
+  desc.style.marginTop = "8px";
+  right.appendChild(desc);
 
-  const spacer = el("div");
-  spacer.style.height = "12px";
-  right.appendChild(spacer);
-
-  const button = el("button", { className: "btn primary", text: "Предзаказ" });
+  const actions = el("div", { className: "event-modal-actions" });
+  const button = el("button", { className: "btn primary event-ticket-btn", text: "Предзаказ" });
   button.type = "button";
   button.addEventListener("click", () => alert("Тут будет форма/бот"));
-  right.appendChild(button);
+  actions.appendChild(button);
 
-  grid.appendChild(left);
-  grid.appendChild(right);
-  return grid;
+  wrapper.appendChild(left);
+  wrapper.appendChild(right);
+  wrapper.appendChild(actions);
+  return wrapper;
 }
 
 function buildProfileModalBody() {
@@ -854,7 +884,7 @@ document.addEventListener("click", (e) => {
   if (type === "merch") {
     const item = data.merch.find((x) => x.id === id);
     if (!item) return;
-    openModal({ title: item.title, sub: `${item.price} · ${item.status}`, body: buildMerchModalBody(item) });
+    openModal({ title: item.title, sub: item.price ? String(item.price) : "", body: buildMerchModalBody(item) });
   }
 });
 
@@ -1087,6 +1117,19 @@ const initApp = async () => {
   renderStreams();
   renderMerch();
   initClubAuth();
+
+  // Пример карусели изображений (можно заменить urls на свой массив)
+  const carouselContainer = document.getElementById("carouselContainer");
+  if (carouselContainer) {
+    createCarousel(carouselContainer, {
+      urls: [
+        ASSET_PREFIX + "npo_print_source%20(1).png",
+        ASSET_PREFIX + "logo.png"
+      ].filter(Boolean),
+      intervalMs: 5000,
+      pauseOnHover: true
+    });
+  }
 };
 
 document.addEventListener("DOMContentLoaded", initApp);

@@ -2038,3 +2038,101 @@
     justify-content: center;
   }
 }
+
+/* Карусель в карточке товара (модалка мерча) */
+#mBody .event-modal-left .merch-modal-carousel-wrap,
+.merch-modal-carousel-wrap {
+  width: 100%;
+  position: relative;
+  min-width: 0;
+}
+
+.merch-modal-carousel {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.merch-modal-carousel .carousel-track-wrap {
+  overflow: hidden;
+  width: 100%;
+}
+
+.merch-modal-carousel .carousel-track {
+  display: flex;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+
+.merch-modal-carousel .carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.merch-modal-carousel .carousel-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  vertical-align: top;
+  max-width: 100%;
+}
+
+.merch-modal-carousel .carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.merch-modal-carousel .carousel-arrow:hover {
+  background: var(--surface-hover);
+  color: var(--text-hover);
+}
+
+.merch-modal-carousel .carousel-arrow-prev {
+  left: 8px;
+}
+
+.merch-modal-carousel .carousel-arrow-next {
+  right: 8px;
+}
+
+.merch-modal-carousel .carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.merch-modal-carousel .carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.merch-modal-carousel .carousel-dot-active,
+.merch-modal-carousel .carousel-dot:hover {
+  background: var(--text);
+}
