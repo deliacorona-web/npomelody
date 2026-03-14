@@ -544,7 +544,7 @@
     #artistsGrid .open-card .pad,
     #merchGrid .open-card .pad,
     #releasesGrid .open-card .pad {
-      padding: 8px;
+      padding: 12px;
     }
 
     #artistsGrid .artist-card .artist-card-name {
@@ -904,7 +904,7 @@
     /* Карточки артистов: высота по контенту, квадратное фото, без пустых блоков */
     #artistsGrid {
       align-items: start;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     #artistsGrid .artist-card {
@@ -933,7 +933,7 @@
     }
 
     #artistsGrid .artist-card .artist-card-body {
-      padding: 8px;
+      padding: 12px;
       min-height: 0;
       flex: none;
       display: block;
@@ -942,7 +942,7 @@
     /* Карточки мерча: как у артистов — без рамки вокруг изображения */
     #merchGrid {
       align-items: start;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     #merchGrid .merch-card {
@@ -971,7 +971,7 @@
     }
 
     #merchGrid .merch-card .merch-card-body {
-      padding: 8px;
+      padding: 12px;
       min-height: 0;
       flex: none;
       display: block;
@@ -980,7 +980,7 @@
     /* Релизы: без рамки, на всю ширину — компактная сетка как у артистов/мерча */
     #releasesGrid {
       align-items: start;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     /* Релизы: без рамки, на всю ширину */
