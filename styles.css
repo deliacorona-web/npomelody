@@ -515,6 +515,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 1.2;
+      text-align: center;
     }
 
     #artistsGrid .artist-name {
@@ -602,6 +603,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       display: block;
+      text-align: center;
     }
 
     .catalog-meta {
@@ -918,6 +920,18 @@
       vertical-align: top;
     }
 
+    #releasesGrid .open-card .pad {
+      text-align: center;
+    }
+
+    #merchGrid .open-card .pad {
+      text-align: center;
+    }
+
+    #merchGrid .open-card .pad .row {
+      justify-content: center;
+    }
+
     .media.square {
       aspect-ratio: 1/1
     }
@@ -986,7 +1000,7 @@
     }
 
     #eventsGrid .event-card .event-card-title {
-      text-align: left;
+      text-align: center;
       flex: 1;
       min-width: 0;
       color: var(--text);
